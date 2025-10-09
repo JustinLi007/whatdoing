@@ -1,0 +1,254 @@
+package handler
+
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+	"service-anime/internal/database"
+	"service-anime/internal/utils"
+	"strings"
+
+	"github.com/google/uuid"
+)
+
+type HandlerAnime interface {
+	CreateAnime(w http.ResponseWriter, r *http.Request)
+	GetAnime(w http.ResponseWriter, r *http.Request)
+	UpdateAnime(w http.ResponseWriter, r *http.Request)
+	DeleteAnime(w http.ResponseWriter, r *http.Request)
+}
+
+type handlerAnime struct {
+	animeService database.ServiceAnime
+}
+
+var handlerAnimeInstance *handlerAnime
+
+func NewHandlerAnime(animeService database.ServiceAnime) HandlerAnime {
+	if handlerAnimeInstance != nil {
+		return handlerAnimeInstance
+	}
+
+	newHandlerAnime := &handlerAnime{
+		animeService: animeService,
+	}
+	handlerAnimeInstance = newHandlerAnime
+
+	return handlerAnimeInstance
+}
+
+func (h *handlerAnime) CreateAnime(w http.ResponseWriter, r *http.Request) {
+	type CreateAnimeRequest struct {
+		Name     string `json:"name"`
+		Episodes int    `json:"episodes"`
+	}
+
+	var req CreateAnimeRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	name := strings.TrimSpace(req.Name)
+	episodes := req.Episodes
+
+	if name == "" {
+		log.Printf("error: %v", "missing name")
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	if episodes <= 0 {
+		log.Printf("error: %v", "episodes <= 0")
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	reqAnime := &database.Anime{
+		Name:     name,
+		Episodes: episodes,
+	}
+	dbAnime, err := h.animeService.CreateAnime(reqAnime)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	utils.WriteJson(w, http.StatusCreated, utils.Envelope{
+		"anime": dbAnime,
+	})
+}
+
+func (h *handlerAnime) GetAnime(w http.ResponseWriter, r *http.Request) {
+	type GetAnimeRequest struct {
+		Id string `json:"id"`
+	}
+
+	var req GetAnimeRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	if err := uuid.Validate(req.Id); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	reqAnime := &database.Anime{
+		Id: id,
+	}
+	dbAnime, err := h.animeService.GetAnimeById(reqAnime)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	utils.WriteJson(w, http.StatusOK, utils.Envelope{
+		"anime": dbAnime,
+	})
+}
+
+func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
+	type UpdateAnimeRequest struct {
+		Id       string `json:"id"`
+		Name     string `json:"name"`
+		Episodes int    `json:"episodes"`
+	}
+
+	var req UpdateAnimeRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	if err := uuid.Validate(req.Id); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	name := strings.TrimSpace(req.Name)
+	episodes := req.Episodes
+
+	if name == "" {
+		log.Printf("error: %v", "missing name")
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	if episodes <= 0 {
+		log.Printf("error: %v", "episodes <= 0")
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	reqAnime := &database.Anime{
+		Id:       id,
+		Name:     name,
+		Episodes: episodes,
+	}
+	dbAnime, err := h.animeService.UpdateAnime(reqAnime)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	utils.WriteJson(w, http.StatusOK, utils.Envelope{
+		"anime": dbAnime,
+	})
+}
+
+func (h *handlerAnime) DeleteAnime(w http.ResponseWriter, r *http.Request) {
+	type DeleteAnimeRequest struct {
+		Id string `json:"id"`
+	}
+
+	var req DeleteAnimeRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	if err := uuid.Validate(req.Id); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+			"message": "bad request",
+		})
+		return
+	}
+
+	reqAnime := &database.Anime{
+		Id: id,
+	}
+	if err := h.animeService.DeleteAnimeById(reqAnime); err != nil {
+		log.Printf("error: %v", err)
+		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	utils.WriteJson(w, http.StatusNoContent, utils.Envelope{})
+}
