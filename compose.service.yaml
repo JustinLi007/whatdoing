@@ -12,6 +12,32 @@ services:
         aliases:
           - auth-service
 
+  service-anime:
+    container_name: whatdoing-service-anime
+    build:
+      context: ./services/anime/
+      dockerfile: Dockerfile
+    command: ["service", "prod"]
+    image: service-anime-app
+    env_file: ./services/anime/.env
+    restart: unless-stopped
+    networks:
+      whatdoing-network:
+        aliases:
+          - anime-service
+
+  service-anime-pub:
+    container_name: whatdoing-service-anime-pub
+    build:
+      context: ./services/anime/
+      dockerfile: Dockerfile
+    command: ["pub", "prod"]
+    image: service-anime-app
+    env_file: ./services/anime/.env
+    restart: unless-stopped
+    networks:
+      - whatdoing-network
+
 networks:
   whatdoing-network:
     external: true

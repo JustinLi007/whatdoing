@@ -1,4 +1,4 @@
-services = gateway users
+services = gateway users anime
 subdirs = $(patsubst %, services/%, $(services))
 
 all: $(subdirs)
