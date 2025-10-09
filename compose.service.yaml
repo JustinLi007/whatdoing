@@ -1,0 +1,17 @@
+services:
+  service-users:
+    container_name: whatdoing-service-users
+    build:
+      context: ./services/users/
+      dockerfile: Dockerfile
+    image: service-user-app
+    env_file: ./services/users/.env
+    restart: unless-stopped
+    networks:
+      whatdoing-network:
+        aliases:
+          - auth-service
+
+networks:
+  whatdoing-network:
+    external: true

@@ -1,0 +1,16 @@
+services:
+  msg-broker:
+    image: rabbitmq:management
+    container_name: whatdoing-msg-broker
+    hostname: "myhost"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      whatdoing-network:
+        aliases:
+          - whatdoing-msg-broker
+
+networks:
+  whatdoing-network:
+    external: true

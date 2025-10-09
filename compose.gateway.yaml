@@ -1,0 +1,17 @@
+services:
+  gateway:
+    container_name: whatdoing-gateway
+    build:
+      context: ./services/gateway/
+      dockerfile: Dockerfile
+    image: gateway-app
+    env_file: ./services/gateway/.env
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+    networks:
+      - whatdoing-network
+
+networks:
+  whatdoing-network:
+    external: true

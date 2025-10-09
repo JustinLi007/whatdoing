@@ -1,0 +1,26 @@
+# test databases
+services:
+  users_db:
+    container_name: whatdoing-service-users-db
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - "./services/users/.database/pg-test-data:/var/lib/postgresql/data:rw"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      whatdoing-network:
+        aliases:
+          - auth-service-test-db
+
+networks:
+  whatdoing-network:
+    external: true
