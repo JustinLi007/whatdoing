@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"service-anime/internal/database"
-	"service-anime/internal/utils"
 	"strings"
+
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 
 	"github.com/google/uuid"
 )

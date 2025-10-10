@@ -17,7 +17,7 @@ services:
     build:
       context: ./services/anime/
       dockerfile: Dockerfile
-    command: ["service", "prod"]
+    command: ["service", "prod", "mode", "service", "env", "prod"]
     image: service-anime-app
     env_file: ./services/anime/.env
     restart: unless-stopped

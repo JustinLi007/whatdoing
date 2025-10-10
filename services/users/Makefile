@@ -24,6 +24,9 @@ dcup:
 dcdown:
 	docker compose down
 
+tidy:
+	go mod tidy
+
 clean:
 	rm ./$(target) -f
 

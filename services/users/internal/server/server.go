@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"service-user/internal/configs"
-	"service-user/internal/database"
-	"service-user/internal/handlers"
-	"service-user/internal/middleware"
-	"service-user/internal/signer"
-	"service-user/migrations"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/users/internal/database"
+	"github.com/JustinLi007/whatdoing/services/users/internal/handlers"
+	"github.com/JustinLi007/whatdoing/services/users/internal/middleware"
+	"github.com/JustinLi007/whatdoing/services/users/internal/signer"
+	"github.com/JustinLi007/whatdoing/services/users/migrations"
 )
 
 type Server struct {

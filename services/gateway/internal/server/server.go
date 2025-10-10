@@ -3,12 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
-	"gateway/internal/configs"
-	"gateway/internal/middleware"
-	"gateway/internal/service"
-	"gateway/internal/verifier"
 	"log"
 	"net/http"
+
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/middleware"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/service"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/verifier"
 )
 
 type Server struct {

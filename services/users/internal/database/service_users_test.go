@@ -1,8 +1,9 @@
 package database
 
 import (
-	"service-user/internal/password"
 	"testing"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/password"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

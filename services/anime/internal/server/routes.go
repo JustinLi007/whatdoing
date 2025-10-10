@@ -2,7 +2,8 @@ package server
 
 import (
 	"net/http"
-	"service-anime/internal/utils"
+
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 
 	"github.com/go-chi/chi/v5"
 )

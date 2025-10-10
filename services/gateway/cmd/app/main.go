@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"gateway/internal/server"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/server"
 )
 
 func main() {

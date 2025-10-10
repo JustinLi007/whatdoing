@@ -3,7 +3,7 @@ package server
 import (
 	"net/http/httputil"
 
-	"gateway/internal/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 )
 
 func (s *Server) NewReverseProxy() *httputil.ReverseProxy {

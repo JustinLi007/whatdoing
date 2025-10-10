@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"service-user/internal/password"
-	"service-user/internal/token"
+	"github.com/JustinLi007/whatdoing/services/users/internal/password"
+	"github.com/JustinLi007/whatdoing/services/users/internal/token"
 
 	"github.com/google/uuid"
 )

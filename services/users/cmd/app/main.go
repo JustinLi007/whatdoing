@@ -7,9 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os/signal"
-	"service-user/internal/server"
 	"syscall"
 	"time"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/server"
 )
 
 func main() {

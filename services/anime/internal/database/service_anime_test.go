@@ -2,9 +2,10 @@ package database
 
 import (
 	"fmt"
-	"service-anime/internal/configs"
-	"service-anime/migrations"
 	"testing"
+
+	"github.com/JustinLi007/whatdoing/services/anime/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/anime/migrations"
 
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"

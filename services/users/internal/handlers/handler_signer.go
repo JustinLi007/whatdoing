@@ -3,7 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"service-user/internal/signer"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/signer"
 )
 
 type HandlerSigner interface {

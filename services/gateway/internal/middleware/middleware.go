@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"gateway/internal/service"
-	"gateway/internal/utils"
-	"gateway/internal/verifier"
 	"net/http"
+
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/service"
+	"github.com/JustinLi007/whatdoing/services/gateway/internal/verifier"
 )
 
 type Middleware interface {

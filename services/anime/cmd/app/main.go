@@ -10,12 +10,26 @@ import (
 	"syscall"
 	"time"
 
-	"service-anime/internal/configs"
-	"service-anime/internal/pubsub"
-	"service-anime/internal/server"
+	libconfigs "github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/pubsub"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/server"
 )
 
 func main() {
+	builder := libconfigs.NewBuilder()
+	builder.Cli("mode")
+	builder.Cli("env")
+	builder.Env("DB_URL")
+	fmt.Println("----------")
+	fmt.Println(builder.String())
+	builtConfig := builder.Build()
+	builtConfig.Parse()
+	fmt.Printf("%s: '%s'\n", "mode", builtConfig.Get("mode"))
+	fmt.Printf("%s: '%s'\n", "env", builtConfig.Get("env"))
+	fmt.Printf("%s: '%s'\n", "DB_URL", builtConfig.Get("DB_URL"))
+	fmt.Println("----------")
+
 	c := configs.NewConfigs(configs.WithDbConfig())
 
 	ctx, cancel := context.WithCancel(context.Background())

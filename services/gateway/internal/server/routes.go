@@ -1,9 +1,9 @@
 package server
 
 import (
-	"gateway/internal/utils"
 	"net/http"
 
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 	"github.com/go-chi/chi/v5"
 )
 

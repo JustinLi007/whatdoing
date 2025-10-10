@@ -3,9 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"service-user/internal/database"
 	"strings"
 	"testing"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/database"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

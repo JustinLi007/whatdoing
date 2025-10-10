@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"service-user/internal/configs"
-	"service-user/internal/database"
-	"service-user/migrations"
 	"testing"
+
+	"github.com/JustinLi007/whatdoing/services/users/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/users/internal/database"
+	"github.com/JustinLi007/whatdoing/services/users/migrations"
 
 	"github.com/joho/godotenv"
 )

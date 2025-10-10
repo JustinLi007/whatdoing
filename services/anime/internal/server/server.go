@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"service-anime/internal/configs"
-	"service-anime/internal/database"
-	"service-anime/internal/handler"
-	"service-anime/migrations"
+
+	"github.com/JustinLi007/whatdoing/services/anime/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/handler"
+	"github.com/JustinLi007/whatdoing/services/anime/migrations"
 )
 
 type Server struct {

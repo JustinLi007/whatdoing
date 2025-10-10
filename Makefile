@@ -29,6 +29,11 @@ logs:
 	-f ./compose.service.yaml \
 	logs
 
+tidy:
+	@for v in $(subdirs); do \
+		$(MAKE) --no-print-directory -C $$v tidy; \
+	done
+
 clean:
 	@for v in $(subdirs); do \
 		$(MAKE) --no-print-directory -C $$v clean; \

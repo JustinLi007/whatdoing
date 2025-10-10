@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"service-anime/internal/configs"
-	"service-anime/internal/database"
-	"service-anime/internal/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/configs"
+	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )

@@ -1,8 +1,7 @@
 package pubsub
 
 import (
-	"service-anime/internal/utils"
-
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 

@@ -1,10 +1,9 @@
-module gateway
+module github.com/JustinLi007/whatdoing/services/gateway
 
-go 1.24.4
-
-toolchain go1.24.7
+go 1.25.2
 
 require (
+	github.com/JustinLi007/whatdoing/libs/go v0.0.3
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/lestrrat-go/httprc/v3 v3.0.1
 	github.com/lestrrat-go/jwx/v3 v3.0.11
