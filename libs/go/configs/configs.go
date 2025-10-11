@@ -45,7 +45,7 @@ func (b *Builder) Env(opt string) *Builder {
 	return b
 }
 
-func (b *Builder) Build() *config {
+func (b *Builder) Build() *Config {
 	b.mtx.RLock()
 	defer b.mtx.RUnlock()
 
@@ -77,14 +77,14 @@ func (b *Builder) String() string {
 	return buf.String()
 }
 
-type config struct {
+type Config struct {
 	mtx     *sync.RWMutex
 	cliOpts map[string]string
 	envOpts map[string]string
 }
 
-func newConfig(cliOpts, envOpts map[string]string) *config {
-	c := &config{
+func newConfig(cliOpts, envOpts map[string]string) *Config {
+	c := &Config{
 		mtx:     &sync.RWMutex{},
 		cliOpts: make(map[string]string),
 		envOpts: make(map[string]string),
@@ -98,7 +98,7 @@ func newConfig(cliOpts, envOpts map[string]string) *config {
 	return c
 }
 
-func (c *config) Parse() {
+func (c *Config) Parse() {
 	c.mtx.Lock()
 	defer c.mtx.Unlock()
 
@@ -106,7 +106,7 @@ func (c *config) Parse() {
 	c.parseCli()
 }
 
-func (c *config) parseCli() {
+func (c *Config) parseCli() {
 	args := os.Args
 	i := 0
 	j := 1
@@ -123,7 +123,7 @@ func (c *config) parseCli() {
 	}
 }
 
-func (c *config) parseEnv() {
+func (c *Config) parseEnv() {
 	temp := make([]string, 0)
 	for k := range c.envOpts {
 		temp = append(temp, k)
@@ -133,7 +133,7 @@ func (c *config) parseEnv() {
 	}
 }
 
-func (c *config) Get(opt string) string {
+func (c *Config) Get(opt string) string {
 	c.mtx.RLock()
 	defer c.mtx.RUnlock()
 
@@ -147,7 +147,7 @@ func (c *config) Get(opt string) string {
 	return ""
 }
 
-func (c *config) getCli(opt string) (string, bool) {
+func (c *Config) getCli(opt string) (string, bool) {
 	if c.cliOpts == nil {
 		return "", false
 	}
@@ -155,7 +155,7 @@ func (c *config) getCli(opt string) (string, bool) {
 	return val, ok
 }
 
-func (c *config) getEnv(opt string) (string, bool) {
+func (c *Config) getEnv(opt string) (string, bool) {
 	if c.envOpts == nil {
 		return "", false
 	}
