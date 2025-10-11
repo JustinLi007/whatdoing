@@ -17,7 +17,7 @@ services:
     build:
       context: ./services/anime/
       dockerfile: Dockerfile
-    command: ["service", "prod", "mode", "service", "env", "prod"]
+    command: ["--mode", "service", "--env", "prod"]
     image: service-anime-app
     env_file: ./services/anime/.env
     restart: unless-stopped
@@ -31,9 +31,35 @@ services:
     build:
       context: ./services/anime/
       dockerfile: Dockerfile
-    command: ["pub", "prod"]
+    command: ["--mode", "pub", "--env", "prod"]
     image: service-anime-app
     env_file: ./services/anime/.env
+    restart: unless-stopped
+    networks:
+      - whatdoing-network
+
+  service-progress:
+    container_name: whatdoing-service-progress
+    build:
+      context: ./services/progress/
+      dockerfile: Dockerfile
+    command: ["--mode", "service", "--env", "prod"]
+    image: service-anime-progress-app
+    env_file: ./services/progress/.env
+    restart: unless-stopped
+    networks:
+      whatdoing-network:
+        aliases:
+          - anime-progress
+
+  service-progress-sub:
+    container_name: whatdoing-service-progress-sub
+    build:
+      context: ./services/progress/
+      dockerfile: Dockerfile
+    command: ["--mode", "sub", "--env", "prod"]
+    image: service-anime-progress-app
+    env_file: ./services/progress/.env
     restart: unless-stopped
     networks:
       - whatdoing-network

@@ -1,4 +1,4 @@
-services = gateway users anime
+services = gateway users anime progress
 subdirs = $(patsubst %, services/%, $(services))
 
 all: $(subdirs)
@@ -21,6 +21,11 @@ down:
 	-f ./compose.db.yaml \
 	-f ./compose.service.yaml \
 	down
+
+rmi:
+	@docker rmi service-user-app:latest
+	@docker rmi service-anime-app:latest
+	@docker rmi service-anime-progress-app:latest
 
 logs:
 	@docker compose \

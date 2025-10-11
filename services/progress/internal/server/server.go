@@ -8,14 +8,12 @@ import (
 
 	"github.com/JustinLi007/whatdoing/libs/go/configs"
 	"github.com/JustinLi007/whatdoing/libs/go/utils"
-	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
-	"github.com/JustinLi007/whatdoing/services/anime/internal/handler"
-	"github.com/JustinLi007/whatdoing/services/anime/migrations"
+	"github.com/JustinLi007/whatdoing/progress/internal/database"
+	"github.com/JustinLi007/whatdoing/progress/migrations"
 )
 
 type Server struct {
-	Port         int
-	animeHandler handler.HandlerAnime
+	Port int
 }
 
 func NewServer(ctx context.Context, c *configs.Config) *http.Server {
@@ -31,10 +29,6 @@ func NewServer(ctx context.Context, c *configs.Config) *http.Server {
 
 	err = db.MigrateFS(migrations.Fs, ".")
 	utils.RequireNoError(err, "error: service failed to connect to db")
-
-	animeService := database.NewServiceAnime(db)
-	animeHandler := handler.NewHandlerAnime(animeService)
-	server.animeHandler = animeHandler
 
 	return &http.Server{
 		Handler: server.RegisterRoutes(),

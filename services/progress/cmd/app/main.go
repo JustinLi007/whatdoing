@@ -10,13 +10,13 @@ import (
 	"syscall"
 	"time"
 
-	libconfigs "github.com/JustinLi007/whatdoing/libs/go/configs"
-	"github.com/JustinLi007/whatdoing/services/anime/internal/pubsub"
-	"github.com/JustinLi007/whatdoing/services/anime/internal/server"
+	"github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/progress/internal/pubsub"
+	"github.com/JustinLi007/whatdoing/progress/internal/server"
 )
 
 func main() {
-	c := libconfigs.NewBuilder().
+	c := configs.NewBuilder().
 		Cli("mode").
 		Cli("env").
 		Env("DB_URL").
@@ -36,12 +36,12 @@ func main() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("error: %v", err)
 		}
-	case "pub":
-		pub := pubsub.NewPublisher(c)
+	case "sub":
+		sub := pubsub.NewSubscriber(c)
 
 		go gracefulShutdownPub(done, cancel)
 
-		pub.Start(ctx)
+		sub.Start(ctx)
 	default:
 		log.Panicf("error: unknown mode")
 	}

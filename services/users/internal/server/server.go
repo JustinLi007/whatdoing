@@ -6,7 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/JustinLi007/whatdoing/services/users/internal/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 	"github.com/JustinLi007/whatdoing/services/users/internal/database"
 	"github.com/JustinLi007/whatdoing/services/users/internal/handlers"
 	"github.com/JustinLi007/whatdoing/services/users/internal/middleware"
@@ -23,29 +24,20 @@ type Server struct {
 	HandlerUsers  handlers.HandlerUsers
 }
 
-func NewServer(ctx context.Context) *http.Server {
+func NewServer(ctx context.Context, c *configs.Config) *http.Server {
 	server := &Server{}
 
-	configs := configs.NewConfigs()
-
-	if err := configs.LoadEnv(); err != nil {
-		log.Fatalf("error: %v", err)
-	}
-
-	server.Port = configs.ConfigServer.Port
-	server.Iss = configs.ConfigServer.Iss
-	server.Aud = configs.ConfigServer.Aud
+	server.Iss = c.Get("JWT_ISSUER")
+	server.Aud = c.Get("JWT_AUDIENCE")
 
 	// database
-	connStr := configs.ConfigDb.PostgresConnStr()
+	connStr := c.Get("DB_URL")
 	if connStr == "" {
 		log.Fatalf("error: %v", fmt.Errorf("invalid conn str"))
 	}
 
 	db, err := database.NewDb(connStr)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
+	utils.RequireNoError(err, "error: service failed to connect to db")
 
 	if err := db.MigrateFS(migrations.Fs, "."); err != nil {
 		log.Fatalf("error: %v", err)

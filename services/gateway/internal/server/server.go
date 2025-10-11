@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
-	"github.com/JustinLi007/whatdoing/services/gateway/internal/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/utils"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/middleware"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/service"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/verifier"
@@ -22,19 +24,15 @@ type Server struct {
 	Verifier   verifier.Verifier
 }
 
-func NewServer(ctx context.Context) *http.Server {
+func NewServer(ctx context.Context, c *configs.Config) *http.Server {
 	server := &Server{}
 
-	configs := configs.NewConfigs()
-
-	if err := configs.LoadEnv(); err != nil {
-		log.Fatalf("error: %v", err)
-	}
-
-	server.Port = configs.ConfigServer.Port
-	server.JwkUrl = configs.ConfigServer.JwkUrl
-	server.Issuer = configs.ConfigServer.Issuer
-	server.Audience = configs.ConfigServer.Audience
+	port, err := strconv.Atoi(c.Get("SERVER_PORT"))
+	utils.RequireNoError(err, "error: failed to parse port")
+	server.Port = port
+	server.JwkUrl = c.Get("JWK_URL")
+	server.Issuer = c.Get("JWT_ISSUER")
+	server.Audience = c.Get("JWT_AUDIENCE")
 
 	// verifier
 	verifier, err := verifier.NewVerifier(server.JwkUrl, server.Issuer, server.Audience)

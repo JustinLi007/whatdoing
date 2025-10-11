@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/JustinLi007/whatdoing/libs/go/configs"
 	"github.com/JustinLi007/whatdoing/libs/go/utils"
-	"github.com/JustinLi007/whatdoing/services/anime/internal/configs"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -32,13 +32,8 @@ type publisher struct {
 
 var publisherIntance *publisher
 
-func NewPublisher() Publisher {
-	configs := configs.NewConfigs()
-
-	err := configs.LoadEnv()
-	utils.RequireNoError(err, "error: publisher failed to load configs")
-
-	connStr := configs.ConfigDb.PostgresConnStr()
+func NewPublisher(c *configs.Config) Publisher {
+	connStr := c.Get("DB_URL")
 	if connStr == "" {
 		utils.RequireNoError(errors.New("invalid db url"), "error")
 	}

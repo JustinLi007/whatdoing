@@ -10,13 +10,23 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/JustinLi007/whatdoing/libs/go/configs"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/server"
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	server := server.NewServer(ctx)
 	done := make(chan bool, 1)
+
+	c := configs.NewBuilder().
+		Env("SERVER_PORT").
+		Env("JWK_URL").
+		Env("JWT_ISSUER").
+		Env("JWT_AUDIENCE").
+		Build()
+	c.Parse()
+
+	server := server.NewServer(ctx, c)
 
 	go gracefullShutdown(server, done, cancel)
 
