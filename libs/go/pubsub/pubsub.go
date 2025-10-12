@@ -4,48 +4,67 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+type ExchangeType int
 type QueueType int
 type AckType int
 
 const (
-	QUEUE_DURABLE QueueType = iota
-	QUEUE_TRANSIENT
+	EXCHANGE_TYPE_DURABLE ExchangeType = iota
+	EXCHANGE_TYPE_TRANSIENT
 )
 
 const (
-	ACK = iota
+	QUEUE_TYPE_DURABLE QueueType = iota
+	QUEUE_TYPE_TRANSIENT
+)
+
+const (
+	ACK AckType = iota
 	NACK_REQUEUE
 	NACK
 )
 
-func declareAndBind(
-	conn *amqp.Connection,
+func ExchangeDeclare(
+	ch *amqp.Channel,
+	name,
+	kind string,
+	exchangeType ExchangeType,
+	args amqp.Table,
+) error {
+	return ch.ExchangeDeclare(
+		name,
+		kind,
+		exchangeType == EXCHANGE_TYPE_DURABLE,
+		exchangeType != EXCHANGE_TYPE_DURABLE,
+		false,
+		false,
+		args,
+	)
+}
+
+func QueueDeclareAndBind(
+	ch *amqp.Channel,
 	exchange,
 	queueName,
 	key string,
 	queueType QueueType,
-	table amqp.Table,
-) (*amqp.Channel, amqp.Queue, error) {
-	ch, err := conn.Channel()
-	if err != nil {
-		return nil, amqp.Queue{}, err
-	}
-
+	args amqp.Table,
+) (amqp.Queue, error) {
 	queue, err := ch.QueueDeclare(
 		queueName,
-		queueType == QUEUE_DURABLE,
-		queueType != QUEUE_DURABLE,
-		queueType != QUEUE_DURABLE,
+		queueType == QUEUE_TYPE_DURABLE,
+		queueType != QUEUE_TYPE_DURABLE,
+		queueType != QUEUE_TYPE_DURABLE,
 		false,
-		table,
+		args,
 	)
 	if err != nil {
-		return nil, amqp.Queue{}, err
+		return amqp.Queue{}, err
 	}
 
 	if err := ch.QueueBind(queue.Name, key, exchange, false, nil); err != nil {
-		return nil, amqp.Queue{}, err
+		return amqp.Queue{}, err
 	}
 
-	return ch, queue, nil
+	return queue, nil
 }

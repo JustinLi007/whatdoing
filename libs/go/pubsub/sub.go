@@ -8,17 +8,17 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-type MessageHandler[T any] func(T) AckType
+type MessageHandler func(T any) AckType
 type MessageUnmarshaller[T any] func([]byte) (T, error)
 
 func SubscribeJSON[T any](
-	conn *amqp.Connection,
+	ch *amqp.Channel,
 	exchange,
 	queueName,
 	key string,
 	queueType QueueType,
 	table amqp.Table,
-	handler MessageHandler[T],
+	handler MessageHandler,
 ) error {
 	unmarshaller := func(data []byte) (T, error) {
 		var temp T
@@ -29,7 +29,7 @@ func SubscribeJSON[T any](
 	}
 
 	return subscribe(
-		conn,
+		ch,
 		exchange,
 		queueName,
 		key,
@@ -41,16 +41,16 @@ func SubscribeJSON[T any](
 }
 
 func subscribe[T any](
-	conn *amqp.Connection,
+	ch *amqp.Channel,
 	exchange,
 	queueName,
 	key string,
 	queueType QueueType,
-	table amqp.Table,
-	handler MessageHandler[T],
+	args amqp.Table,
+	handler MessageHandler,
 	unmarshaller MessageUnmarshaller[T],
 ) error {
-	ch, queue, err := declareAndBind(conn, exchange, queueName, key, queueType, table)
+	queue, err := QueueDeclareAndBind(ch, exchange, queueName, key, queueType, args)
 	if err != nil {
 		return err
 	}
