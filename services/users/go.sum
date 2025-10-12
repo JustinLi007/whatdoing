@@ -1,5 +1,5 @@
-github.com/JustinLi007/whatdoing/libs/go v0.0.5 h1:Bz2KZu+I2FHEDH8qiQ2qFiyD81GeA+7rC9g/U6X9kao=
-github.com/JustinLi007/whatdoing/libs/go v0.0.5/go.mod h1:ZxplS829C2dCwGCKeY8NeEkMD8PMcmFZDNv1fiYGywk=
+github.com/JustinLi007/whatdoing/libs/go v0.0.9 h1:Gk0jgHB9MGzcb4TDuzobYW0OTbpQD295xNYZhB5Dxjs=
+github.com/JustinLi007/whatdoing/libs/go v0.0.9/go.mod h1:7pWsinNC4XRNu0p3usaen7epMq8IEcyleaim/7IMCPo=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

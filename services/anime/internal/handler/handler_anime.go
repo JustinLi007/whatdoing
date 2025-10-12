@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 
 	"github.com/google/uuid"
@@ -47,7 +47,7 @@ func (h *handlerAnime) CreateAnime(w http.ResponseWriter, r *http.Request) {
 	var req CreateAnimeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -58,7 +58,7 @@ func (h *handlerAnime) CreateAnime(w http.ResponseWriter, r *http.Request) {
 
 	if name == "" {
 		log.Printf("error: %v", "missing name")
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -66,7 +66,7 @@ func (h *handlerAnime) CreateAnime(w http.ResponseWriter, r *http.Request) {
 
 	if episodes <= 0 {
 		log.Printf("error: %v", "episodes <= 0")
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -79,13 +79,13 @@ func (h *handlerAnime) CreateAnime(w http.ResponseWriter, r *http.Request) {
 	dbAnime, err := h.animeService.CreateAnime(reqAnime)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+		util.WriteJson(w, http.StatusInternalServerError, util.Envelope{
 			"message": "internal server error",
 		})
 		return
 	}
 
-	utils.WriteJson(w, http.StatusCreated, utils.Envelope{
+	util.WriteJson(w, http.StatusCreated, util.Envelope{
 		"anime": dbAnime,
 	})
 }
@@ -98,7 +98,7 @@ func (h *handlerAnime) GetAnime(w http.ResponseWriter, r *http.Request) {
 	var req GetAnimeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -106,7 +106,7 @@ func (h *handlerAnime) GetAnime(w http.ResponseWriter, r *http.Request) {
 
 	if err := uuid.Validate(req.Id); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -115,7 +115,7 @@ func (h *handlerAnime) GetAnime(w http.ResponseWriter, r *http.Request) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -127,13 +127,13 @@ func (h *handlerAnime) GetAnime(w http.ResponseWriter, r *http.Request) {
 	dbAnime, err := h.animeService.GetAnimeById(reqAnime)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+		util.WriteJson(w, http.StatusInternalServerError, util.Envelope{
 			"message": "internal server error",
 		})
 		return
 	}
 
-	utils.WriteJson(w, http.StatusOK, utils.Envelope{
+	util.WriteJson(w, http.StatusOK, util.Envelope{
 		"anime": dbAnime,
 	})
 }
@@ -148,7 +148,7 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 	var req UpdateAnimeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -156,7 +156,7 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 
 	if err := uuid.Validate(req.Id); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -165,7 +165,7 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -176,7 +176,7 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 
 	if name == "" {
 		log.Printf("error: %v", "missing name")
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -184,7 +184,7 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 
 	if episodes <= 0 {
 		log.Printf("error: %v", "episodes <= 0")
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -198,13 +198,13 @@ func (h *handlerAnime) UpdateAnime(w http.ResponseWriter, r *http.Request) {
 	dbAnime, err := h.animeService.UpdateAnime(reqAnime)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+		util.WriteJson(w, http.StatusInternalServerError, util.Envelope{
 			"message": "internal server error",
 		})
 		return
 	}
 
-	utils.WriteJson(w, http.StatusOK, utils.Envelope{
+	util.WriteJson(w, http.StatusOK, util.Envelope{
 		"anime": dbAnime,
 	})
 }
@@ -217,7 +217,7 @@ func (h *handlerAnime) DeleteAnime(w http.ResponseWriter, r *http.Request) {
 	var req DeleteAnimeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -225,7 +225,7 @@ func (h *handlerAnime) DeleteAnime(w http.ResponseWriter, r *http.Request) {
 
 	if err := uuid.Validate(req.Id); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -234,7 +234,7 @@ func (h *handlerAnime) DeleteAnime(w http.ResponseWriter, r *http.Request) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusBadRequest, utils.Envelope{
+		util.WriteJson(w, http.StatusBadRequest, util.Envelope{
 			"message": "bad request",
 		})
 		return
@@ -245,11 +245,11 @@ func (h *handlerAnime) DeleteAnime(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := h.animeService.DeleteAnimeById(reqAnime); err != nil {
 		log.Printf("error: %v", err)
-		utils.WriteJson(w, http.StatusInternalServerError, utils.Envelope{
+		util.WriteJson(w, http.StatusInternalServerError, util.Envelope{
 			"message": "internal server error",
 		})
 		return
 	}
 
-	utils.WriteJson(w, http.StatusNoContent, utils.Envelope{})
+	util.WriteJson(w, http.StatusNoContent, util.Envelope{})
 }

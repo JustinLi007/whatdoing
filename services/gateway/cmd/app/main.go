@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/server"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan bool, 1)
 
-	c := configs.NewBuilder().
+	c := config.NewBuilder().
 		Env("SERVER_PORT").
 		Env("JWK_URL").
 		Env("JWT_ISSUER").

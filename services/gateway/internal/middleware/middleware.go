@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/service"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/verifier"
 )
@@ -58,7 +58,7 @@ func (m *middleware) Cors(next http.Handler) http.Handler {
 
 func (m *middleware) VerifyJwt(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		prefix, _, ok := utils.ParseRequestUrl(r)
+		prefix, _, ok := util.ParseRequestUrl(r)
 		if !ok {
 			w.WriteHeader(http.StatusNotFound)
 			return
@@ -87,7 +87,7 @@ func (m *middleware) VerifyJwt(next http.Handler) http.Handler {
 			return
 		}
 
-		if !utils.HasScope(endpoint.Scope, scope) {
+		if !util.HasScope(endpoint.Scope, scope) {
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}

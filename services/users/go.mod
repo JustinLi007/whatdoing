@@ -3,7 +3,7 @@ module github.com/JustinLi007/whatdoing/services/users
 go 1.25.2
 
 require (
-	github.com/JustinLi007/whatdoing/libs/go v0.0.5
+	github.com/JustinLi007/whatdoing/libs/go v0.0.9
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.5

@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -27,7 +27,7 @@ func (s *Server) RegisterRoutes() *chi.Mux {
 }
 
 func (s *Server) Healthz(w http.ResponseWriter, r *http.Request) {
-	utils.WriteJson(w, http.StatusOK, utils.Envelope{
+	util.WriteJson(w, http.StatusOK, util.Envelope{
 		"message": "service users good",
 	})
 }

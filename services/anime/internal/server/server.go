@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/JustinLi007/whatdoing/libs/go/configs"
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/handler"
 	"github.com/JustinLi007/whatdoing/services/anime/migrations"
@@ -18,7 +18,7 @@ type Server struct {
 	animeHandler handler.HandlerAnime
 }
 
-func NewServer(ctx context.Context, c *configs.Config) *http.Server {
+func NewServer(ctx context.Context, c *config.Config) *http.Server {
 	server := &Server{}
 
 	connStr := c.Get("DB_URL")
@@ -27,10 +27,10 @@ func NewServer(ctx context.Context, c *configs.Config) *http.Server {
 	}
 
 	db, err := database.NewDb(connStr)
-	utils.RequireNoError(err, "error: service failed to connect to db")
+	util.RequireNoError(err, "error: service failed to connect to db")
 
 	err = db.MigrateFS(migrations.Fs, ".")
-	utils.RequireNoError(err, "error: service failed to connect to db")
+	util.RequireNoError(err, "error: service failed to connect to db")
 
 	animeService := database.NewServiceAnime(db)
 	animeHandler := handler.NewHandlerAnime(animeService)

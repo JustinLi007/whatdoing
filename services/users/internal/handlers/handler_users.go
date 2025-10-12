@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	libutils "github.com/JustinLi007/whatdoing/libs/go/utils"
+	libutils "github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/users/internal/database"
 	"github.com/JustinLi007/whatdoing/services/users/internal/password"
 	"github.com/JustinLi007/whatdoing/services/users/internal/signer"

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/JustinLi007/whatdoing/libs/go/configs"
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/middleware"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/service"
 	"github.com/JustinLi007/whatdoing/services/gateway/internal/verifier"
@@ -24,11 +24,11 @@ type Server struct {
 	Verifier   verifier.Verifier
 }
 
-func NewServer(ctx context.Context, c *configs.Config) *http.Server {
+func NewServer(ctx context.Context, c *config.Config) *http.Server {
 	server := &Server{}
 
 	port, err := strconv.Atoi(c.Get("SERVER_PORT"))
-	utils.RequireNoError(err, "error: failed to parse port")
+	util.RequireNoError(err, "error: failed to parse port")
 	server.Port = port
 	server.JwkUrl = c.Get("JWK_URL")
 	server.Issuer = c.Get("JWT_ISSUER")

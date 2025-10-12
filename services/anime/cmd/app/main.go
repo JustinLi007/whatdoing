@@ -10,13 +10,13 @@ import (
 	"syscall"
 	"time"
 
-	libconfigs "github.com/JustinLi007/whatdoing/libs/go/configs"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/pubsub"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/server"
 )
 
 func main() {
-	c := libconfigs.NewBuilder().
+	c := config.NewBuilder().
 		Cli("mode").
 		Cli("env").
 		Env("DB_URL").

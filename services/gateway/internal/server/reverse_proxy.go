@@ -3,12 +3,12 @@ package server
 import (
 	"net/http/httputil"
 
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 )
 
 func (s *Server) NewReverseProxy() *httputil.ReverseProxy {
 	rewriteFn := func(pr *httputil.ProxyRequest) {
-		prefix, pathValue, ok := utils.ParseRequestUrl(pr.In)
+		prefix, pathValue, ok := util.ParseRequestUrl(pr.In)
 		if !ok {
 			return
 		}

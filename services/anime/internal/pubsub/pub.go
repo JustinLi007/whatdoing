@@ -6,8 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/JustinLi007/whatdoing/libs/go/configs"
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
+	"github.com/JustinLi007/whatdoing/libs/go/pubsub"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/anime/internal/database"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -32,14 +33,14 @@ type publisher struct {
 
 var publisherIntance *publisher
 
-func NewPublisher(c *configs.Config) Publisher {
+func NewPublisher(c *config.Config) Publisher {
 	connStr := c.Get("DB_URL")
 	if connStr == "" {
-		utils.RequireNoError(errors.New("invalid db url"), "error")
+		util.RequireNoError(errors.New("invalid db url"), "error")
 	}
 
 	db, err := database.NewDb(connStr)
-	utils.RequireNoError(err, "error: publisher failed to connect to database")
+	util.RequireNoError(err, "error: publisher failed to connect to database")
 
 	outboxService := database.NewServiceOutbox(db)
 	return newPublisher(outboxService)
@@ -78,7 +79,12 @@ func (p *publisher) start(ctx context.Context, wg *sync.WaitGroup) {
 	for {
 		select {
 		case <-timer.C:
-			p.publishJSON("whatdoing", "anime.create", []byte("test"))
+			pubsub.PublishJSON(
+				p.ch,
+				"whatdoing",
+				"anime.test",
+				[]byte("test"),
+			)
 			timer.Reset(p.interval)
 		case <-ctx.Done():
 			return
@@ -86,43 +92,23 @@ func (p *publisher) start(ctx context.Context, wg *sync.WaitGroup) {
 	}
 }
 
-func (p *publisher) publishJSON(exchange, key string, msg []byte) error {
-	return p.ch.PublishWithContext(
-		context.Background(), // ctx
-		exchange,             // exchange
-		key,                  // key
-		false,                // mandatory
-		false,                // immediate
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        msg,
-		},
-	)
-}
-
 func (p *publisher) connect() {
 	conn, err := amqp.Dial(p.url)
-	utils.RequireNoError(err, "Error: publisher failed to establish a connection")
+	util.RequireNoError(err, "error: publisher failed to establish a connection")
 	p.conn = conn
 
 	ch, err := conn.Channel()
-	utils.RequireNoError(err, "Error: publisher failed to create a channel")
+	util.RequireNoError(err, "error: publisher failed to create a channel")
 	p.ch = ch
 }
 
 func (p *publisher) declareExchanges() {
-	err := p.declareExchange("whatdoing", "topic", true, nil)
-	utils.RequireNoError(err, "Error: publisher failed to declare an exchange")
-}
-
-func (p *publisher) declareExchange(name, kind string, durable bool, args amqp.Table) error {
-	return p.ch.ExchangeDeclare(
-		name,     // name
-		kind,     // kind
-		durable,  // durable
-		!durable, // auto delete
-		false,    // internal
-		false,    // no wait
-		args,     // args
+	err := pubsub.ExchangeDeclare(
+		p.ch,
+		"whatdoing",
+		"topic",
+		pubsub.EXCHANGE_TYPE_DURABLE,
+		nil,
 	)
+	util.RequireNoError(err, "error: publisher failed to declare an exchange")
 }

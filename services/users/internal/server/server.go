@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/JustinLi007/whatdoing/libs/go/configs"
-	"github.com/JustinLi007/whatdoing/libs/go/utils"
+	"github.com/JustinLi007/whatdoing/libs/go/config"
+	"github.com/JustinLi007/whatdoing/libs/go/util"
 	"github.com/JustinLi007/whatdoing/services/users/internal/database"
 	"github.com/JustinLi007/whatdoing/services/users/internal/handlers"
 	"github.com/JustinLi007/whatdoing/services/users/internal/middleware"
@@ -24,7 +24,7 @@ type Server struct {
 	HandlerUsers  handlers.HandlerUsers
 }
 
-func NewServer(ctx context.Context, c *configs.Config) *http.Server {
+func NewServer(ctx context.Context, c *config.Config) *http.Server {
 	server := &Server{}
 
 	server.Iss = c.Get("JWT_ISSUER")
@@ -37,7 +37,7 @@ func NewServer(ctx context.Context, c *configs.Config) *http.Server {
 	}
 
 	db, err := database.NewDb(connStr)
-	utils.RequireNoError(err, "error: service failed to connect to db")
+	util.RequireNoError(err, "error: service failed to connect to db")
 
 	if err := db.MigrateFS(migrations.Fs, "."); err != nil {
 		log.Fatalf("error: %v", err)
