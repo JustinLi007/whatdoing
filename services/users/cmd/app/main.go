@@ -19,7 +19,7 @@ func main() {
 	done := make(chan bool, 1)
 
 	c := config.NewBuilder().
-		Env("DB_URL").
+		// Env("DB_URL").
 		Env("JWT_ISSUER").
 		Env("JWT_AUDIENCE").
 		Build()
