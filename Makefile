@@ -23,6 +23,7 @@ down:
 	down
 
 rmi:
+	@docker rmi gateway-app:latest
 	@docker rmi service-user-app:latest
 	@docker rmi service-anime-app:latest
 	@docker rmi service-anime-progress-app:latest

@@ -1,26 +1,30 @@
 target = service-progress
 main = cmd/app/
-src = $(shell find . -path "./.*" -prune -o -name '*.go')
+src = $(shell find . -path './.*' -prune -o -name '*.go')
 
 default: $(target)
 
 $(target): $(src)
 	go build -o ./$(target) ./$(main)
 
-run: $(target)
-	./$(target)
+run-service: $(target)
+	./$(target) "service"
+
+run-sub: 
+	./$(target) "sub"
 
 test: $(target)
 	go clean -testcache
-	go test ./... -v
+	go test ./...
 
-dcup:
-	docker compose --env-file ./.env --profile service-anime-progress up -d
-	docker compose --env-file ../service-progress-consumer/consumer-anime/.env --profile consumer-anime up -d
+dcup-service:
+	docker compose up app -d
+
+dcup-sub:
+	docker compose up sub -d
 
 dcdown:
-	docker compose --profile service-anime-progress down
-	docker compose --profile consumer-anime down
+	docker compose down
 
 tidy:
 	go mod tidy
@@ -28,4 +32,4 @@ tidy:
 clean:
 	rm ./$(target) -f
 
-PHONY: clean default run test dcup dcdown
+PHONY: clean default test dcup-service dcup-sub dcdown run-service run-sub
